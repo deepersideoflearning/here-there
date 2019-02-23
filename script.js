@@ -2,7 +2,7 @@
 // Allow Location Toast - will chain to other function
 function toast() {
     M.toast({
-        html: 'Allow Your Location Above ^',
+        html: 'Please Allow Your Location',
         displayLength: 1000,
         completeCallback: function () {
             getLocation();
