@@ -1,9 +1,9 @@
-const populteMap = import('populateMap');
-
+// Declaring Global variables === BAD CODE
 let numberBars = 0;
 let numberPrice = 0;
 let numberMiles = 0;
 
+// Toast - To be run when user clicks send
 function toast() {
     M.toast({
         html: 'Please Allow Your Location',
@@ -26,15 +26,19 @@ function getLocation() {
 
 // Temporary - Display User Location
 function showPosition(position) {
-    const myLocation = {
+    // My Location from HTTP Request
+    myLocation = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
     }
+    // Logging Current Latitude/Longitude
     console.log('My Location:');
     console.log(myLocation);
 
+    // Using a CORS Proxy
     var corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
+    // Configuration for API Call
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -47,15 +51,18 @@ function showPosition(position) {
         }
     }
 
+    // AJAX Call to Yelp API
     $.ajax(settings).done(function (response) {
-        sortBars(response, numberBars, numberPrice, numberMiles);
+        sortBars(myLocation, response, numberBars, numberPrice, numberMiles);
     });
 }
 
+// Declaring Elements to append slider to DIV
 const barRange = document.getElementById('barRange');
 const priceRange = document.getElementById('priceRange');
 const walkRange = document.getElementById('walkRange');
 
+// Number of Bars (2 - 10)
 noUiSlider.create(barRange, {
     start: [6],
     step: 1,
@@ -70,6 +77,7 @@ noUiSlider.create(barRange, {
     }
 });
 
+// Pricing Range (1 - 3)
 noUiSlider.create(priceRange, {
     start: [2],
     step: 1,
@@ -80,12 +88,13 @@ noUiSlider.create(priceRange, {
     behaviour: 'tap'
 });
 
+// How far are you willing to walk
 noUiSlider.create(walkRange, {
-    start: [1.25],
-    step: .1,
+    start: [1],
+    step: .25,
     range: {
         'min': [.5],
-        'max': [2]
+        'max': [1.5]
     },
     behaviour: 'tap',
     pips: {
@@ -94,15 +103,12 @@ noUiSlider.create(walkRange, {
     }
 });
 
-var nonLinearSliderValueElement = document.getElementById('barRangeValue');
-// var nonLinearSliderValueElement = document.getElementById('priceRangeValue');
-
 // Show the value for the *last* moved handle.
 barRange.noUiSlider.on('update', function (values, handle) {
     $('#numberBars').html(Math.round(values));
     numberBars = Math.round(values);
     let message = '';
-    
+
     if (numberBars <= 3) {
         message = 'Eh, you can drive';
     } else if ((numberBars >= 7)) {
@@ -117,16 +123,13 @@ priceRange.noUiSlider.on('update', function (values, handle) {
     numberPrice = Math.round(values);
 });
 
-
 walkRange.noUiSlider.on('update', function (values, handle) {
     $('#numberMiles').html(values);
     numberMiles = values;
 });
 
-const sortBars = (response, numberBars, numberPrice, numberMiles) => {
+const sortBars = (myLocation, response, numberBars, numberPrice, numberMiles) => {
     let results = [];
-    // const barRange = barRange.noUiSlider.get()
-    // console.log(barRange);
 
     // Number of Bars to Return
     console.log(numberBars);
@@ -152,12 +155,14 @@ const sortBars = (response, numberBars, numberPrice, numberMiles) => {
             open = true;
         }
 
+
+
         const result = {
             name: response.businesses[i].name,
             price: price,
             location: {
-                latitude: response.businesses[i].coordinates.latitude,
-                longitude: response.businesses[i].coordinates.longitude
+                lat: response.businesses[i].coordinates.latitude,
+                lng: response.businesses[i].coordinates.longitude
             },
             imageurl: response.businesses[i].image_url,
             url: response.businesses[i].url,
@@ -188,11 +193,51 @@ const sortBars = (response, numberBars, numberPrice, numberMiles) => {
     }
 
     results.splice(numberBars, (results.length - numberBars));
+   
+    // MORE JAVASCRIPT
+    populateMap(myLocation, results);
 
-    console.log(results);
-
-    populteMap();
+}
 
 
+const populateMap = (myLocation, results) => {
+    $('#cardRow').html('');
+    $('#map').css('display', 'block');
 
+    initMap(myLocation, results);
+
+
+    function initMap(myLocation, results) {
+        console.log(results);
+        console.log(myLocation);
+        const center = {
+            lat: myLocation.latitude,
+            lng: myLocation.longitude
+        }
+        const location = []
+
+        for (let i = 0; i < results.length; i++) {
+            location.push(results[0].location);
+        }
+
+        console.log('location');
+        console.log(location);
+
+        // The map, centered between 
+        const map = new google.maps.Map(
+            document.getElementById('map'), {
+                zoom: 14,
+                center: center
+            });
+
+        for (let i = 0; i < location.length; i++) {
+            console.log('map marker for:');
+            console.log(location[i]);
+            new google.maps.Marker({
+                position: new google.maps.LatLng(location[i]),
+                map: map
+            })
+        }
+
+    }
 }

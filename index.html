@@ -29,13 +29,13 @@
             <ul class="right">
                 <li><a href="sass.html"><i class="material-icons">search</i></a></li>
                 <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
-                <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
+                <li><a href="index.html"><i class="material-icons">refresh</i></a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="row" id="cardRow">
+    <div class="container" id="card">
+        <div class="row front" id="cardRow">
             <div class="card">
                 <div class="row ranges">
                     <div id="barLabel">
@@ -67,18 +67,36 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="row back" id="cardRow">Back</div> -->
+
+        <div id="map"></div>
+    </div>
 
 
-        <!-- Compiled and minified JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-        <!-- Google Jquery CDN -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Google Jquery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.1/nouislider.js"></script>
+    <!-- noUISlider -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.1/nouislider.js"></script>
 
-        <!-- Local JS -->
-        <script src="script.js"></script>
+    <!-- Flip.js -->
+    <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+
+    <!-- HERE API -->
+    <!-- <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="http://js.api.here.com/v3/3.0/mapsjs-ui.css" /> -->
+
+    <!-- Local JS -->
+    <script src="script.js"></script>
+
+    <!-- Google Maps Script -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKAcx1c1B2bTd6OpFzYKIB3o45sue1788&callback=initMap">
+    </script>
 </body>
 
 </html>
