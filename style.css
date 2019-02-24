@@ -1,3 +1,11 @@
+body, html {
+    height: 100%;
+}
+
+.nav-wrapper {
+    margin-bottom: 0px;
+}
+
 #toast-container {
     position: fixed !important;
     top: 40% !important;
@@ -5,65 +13,51 @@
 }
 
 .card {
+    width: 90%;
+    left: 5%;
     padding: 20px;
+    margin-top: 20px;
 }
 
-
-
-
-.slidecontainer {
-    width: 100%;
-    /* Width of the outside container */
+#barRange {
+    margin: 0 0 60px 0;
 }
 
-/* The slider itself */
-.slider {
-    -webkit-appearance: none;
-    /* Override default CSS styles */
-    appearance: none;
-    width: 100%;
-    /* Full-width */
-    height: 25px;
-    /* Specified height */
-    background: #d3d3d3;
-    /* Grey background */
-    outline: none;
-    /* Remove outline */
-    opacity: 0.7;
-    /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s;
-    /* 0.2 seconds transition on hover */
-    transition: opacity .2s;
+#priceRance {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
 
-/* Mouse-over effects */
-.slider:hover {
-    opacity: 1;
-    /* Fully shown on mouse-over */
+.dollaBill {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    letter-spacing: -3px;
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    /* Override default look */
-    appearance: none;
-    width: 25px;
-    /* Set a specific slider handle width */
-    height: 25px;
-    /* Slider handle height */
-    background: #4CAF50;
-    /* Green background */
-    cursor: pointer;
-    /* Cursor on hover */
+#oneDollar {
+    float: left;
 }
 
-.slider::-moz-range-thumb {
-    width: 25px;
-    /* Set a specific slider handle width */
-    height: 25px;
-    /* Slider handle height */
-    background: #4CAF50;
-    /* Green background */
-    cursor: pointer;
-    /* Cursor on hover */
+#twoDollar {
+    margin-left: 44%;
+}
+
+#threeDollar {
+    float: right;
+}
+
+#barLabel {
+    height: 60px;
+    text-align: center;
+    margin: 10px 0 0 0;
+    padding: 0px 0px 15px 0px;
+}
+
+#priceLabel {
+    height: 60px;
+    text-align: center;
+    margin: 10px 0 0 0;
+    padding: 0px 0px 15px 0px;
 }

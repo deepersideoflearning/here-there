@@ -1,4 +1,3 @@
-
 // Allow Location Toast - will chain to other function
 function toast() {
     M.toast({
@@ -11,7 +10,7 @@ function toast() {
 }
 
 
-// Get Location
+// Get User Location from HTTPS
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -21,6 +20,7 @@ function getLocation() {
     }
 }
 
+// Temporary - Display User Location
 function showPosition(position) {
     const myLocation = {
         latitude: position.coords.latitude,
@@ -32,9 +32,39 @@ function showPosition(position) {
     //     "<br>Longitude: " + position.coords.longitude;
 
     $('#demo').append(testDiv);
-
 }
 
 
 
-// OnLoad - check location
+
+const barRange = document.getElementById('barRange');
+const priceRange = document.getElementById('priceRange');
+
+noUiSlider.create(barRange, {
+    start: [5],
+    step: 1,
+    range: {
+        'min': [0],
+        'max': [10]
+    },
+    behaviour: 'tap',
+    pips: {mode: 'count', values: 5}
+});
+
+noUiSlider.create(priceRange, {
+    start: [2],
+    step: 1,
+    range: {
+        'min': [1],
+        'max': [3]
+    },
+    behaviour: 'tap'
+});
+
+var nonLinearSliderValueElement = document.getElementById('barRangeValue');
+// var nonLinearSliderValueElement = document.getElementById('priceRangeValue');
+
+// Show the value for the *last* moved handle.
+barRange.noUiSlider.on('update', function (values, handle) {
+    console.log('updated: ' + values);
+});

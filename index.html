@@ -8,14 +8,18 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
+    <!-- NoUISlider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.1/nouislider.css">
+
     <!-- Local CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="style.css">
 
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 
 <body>
+
     <nav>
         <div class="nav-wrapper">
             <a href="#!" class="brand-logo left"><i class="material-icons">local_bar</i>HERE's Beer!</a>
@@ -26,21 +30,28 @@
             </ul>
         </div>
     </nav>
+
     <div class="container">
-        <div class="row">
+        <div class="row" id="cardRow">
             <div class="card">
-                How Many Stops:
-                <div class="row slidecontainer">
+                <div class="row ranges">
+                    <div id="barLabel">
+                        5 Bars
+                    </div>
+                    <div class="row" id="barRange"></div>
 
-                    <input type="range" min="1" max="5" value="3" class="slider" id="myRange">
+                    <div id="priceLabel">
+                        Average Cost
+                    </div>
+                    <div class="row" id="priceRange"></div>
+                    <div class="dollaBill">
+                        <span id="oneDollar">$</span>
+                        <span id="twoDollar">$$</span>
+                        <span id="threeDollar">$$$</span>
+                    </div>
+
 
                 </div>
-
-                Price Range:
-                <div class="row slidecontainer">
-                    <input type="range" min="1" max="3" value="2" class="slider" id="myRange">
-                </div>
-
 
                 <div class="row" id="searchRow">
                     <a class="waves-effect waves-light btn-large" onclick="toast()"><i class="material-icons right">map</i>Find
@@ -53,7 +64,7 @@
 
 
 
-        
+
 
 
     </div>
@@ -73,6 +84,8 @@
 
     <!-- Google Jquery CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.1/nouislider.js"></script>
 
     <!-- Local JS -->
     <script src="script.js"></script>
