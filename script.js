@@ -311,10 +311,11 @@ $(document).ready(function () {
 
         const params = {
             "mode": "shortest;pedestrian",
-            "representation": "display"
+            "representation": "display",
+            "waypoint0": [center.lat, center.lng]
         }
         for (let i = 0; i < results.length; i++) {
-            params['waypoint' + i] = [results[i].location.lat, results[i].location.lng];
+            params['waypoint' + (i+1)] = [results[i].location.lat, results[i].location.lng];
         }
 
         console.log(params);
@@ -330,6 +331,8 @@ $(document).ready(function () {
         for (let i = 0; i < results.length; i++) {
             dropMarker(results[i].location.lat, results[i].location.lng)
         }
+
+        dropMarker(center.lat, center.lng);
 
         router.calculateRoute(params, data => {
             if (data.response) {
