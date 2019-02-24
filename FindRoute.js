@@ -27,18 +27,16 @@ function Routing(coord, credit, container){
 	var linestring = new H.geo.LineString();
 	
 	var ui = H.ui.UI.createDefault(map, maptypes);
+	var bubble;
 	
 	for(i = 0; i < coord.length; i++){
 		var key = coord[i]['location']['latitude'].toString() + "," + coord[i]['location']['longitude'].toString();
-		var markName;
-		if(LocNames.get(key)['name']){
-			markName = '<svg width="' + (LocNames.get(key)['name'].length * 6 + 60) +'" height="22" ' +
-						   'xmlns="http://www.w3.org/2000/svg">' +
-						   '<rect stroke="white" fill="#1b468d" x="0" y="0" width="' + (LocNames.get(key)['name'].length * 6 + 60)+ '" ' +
-						   'height="22" /><text x="'+ (LocNames.get(key)['name'].length * 3 + 30)+'" y="14" font-size="8pt" ' +
-						   'font-family="Arial" font-weight="bold" text-anchor="middle" ' +
-						   'fill="white">'+ LocNames.get(key)['name'].toString() + ' (Rating: ' +  LocNames.get(key)['rating'].toString() + ' )</text></svg>';
-		}
+		
+		bubble = new H.ui.InfoBubble({ lng: coord[i]['location']['longitude'], lat: coord[i]['location']['latitude']}, {
+			content: LocNames.get(key)['name'].toString() + ' (Rating: ' + LocNames.get(key)['rating'].toString() + ')'
+		});
+		
+		bubble.close();
 		
 		var startMarker = new H.map.Marker({
 			lat: coord[i]['location']['latitude'],
@@ -46,28 +44,21 @@ function Routing(coord, credit, container){
 		});
 			
 		map.addObjects([startMarker]);
-		
-		var icon = new H.map.Icon(markName);
-		var InfoMark = new H.map.Marker({
-			lat: coord[i]['location']['latitude'],
-			lng: coord[i]['location']['longitude']
-		}, {icon: icon});
-		
-		InfoMark.setVisibility(false);
 	
-		MarkerPair.set(key, InfoMark);
+		MarkerPair.set(key, bubble);
 		startMarker.addEventListener('pointerenter', function(evt){
 			var a = evt.currentTarget.getPosition();
 			var k = a.lat + "," + a.lng;
-			MarkerPair.get(k).setVisibility(true);
+			MarkerPair.get(k).open();
 		});
 		
-		startMarker.addEventListener('pointerleave', function(evt){
+		MarkerPair.get(key).addEventListener('pointerleave', function(evt){
 			var a = evt.currentTarget.getPosition();
 			var k = a.lat + "," + a.lng;
-			MarkerPair.get(k).setVisibility(false);
+			MarkerPair.get(k).close();
 		});
-		map.addObjects([InfoMark]);
+		
+		ui.addBubble(bubble);
 	}
 	
 	var mapEvents = new H.mapevents.MapEvents(map);
@@ -92,7 +83,8 @@ function Routing(coord, credit, container){
 			endPoint = route.waypoint[1].mappedPosition;
 
 			var routeLine = new H.map.Polyline(linestring, {
-				style: { strokeColor: 'blue', lineWidth: 3 }
+				style: { lineWidth: 10 },
+				arrows: {fillColor: 'white', frequency: 2, width: 0.8, length: 0.7}
 			});
 
 			map.addObjects([routeLine]);
@@ -107,7 +99,7 @@ function Routing(coord, credit, container){
 		router.calculateRoute(coords[i], onResult, function(error){
 			alert(error.message);
 		});
-	}
+	}	
 	
 	return DirCoord;
 }
