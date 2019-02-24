@@ -2,6 +2,11 @@ body, html {
     height: 100%;
 }
 
+body {
+    background-image: url('./sanfran.jpg');
+    background-size: cover;
+}
+
 .nav-wrapper {
     margin-bottom: 0px;
 }
@@ -13,10 +18,12 @@ body, html {
 }
 
 .card {
-    width: 90%;
-    left: 5%;
+    width: 92%;
+    left: 4%;
     padding: 20px;
     margin-top: 20px;
+    opacity: .90;
+    background-color: rgb(201, 199, 197);
 }
 
 #barRange {
@@ -55,9 +62,18 @@ body, html {
     padding: 0px 0px 15px 0px;
 }
 
+.noUi-pips {
+    color: black;
+}
+
+
 #priceLabel {
     height: 60px;
     text-align: center;
     margin: 10px 0 0 0;
     padding: 0px 0px 15px 0px;
+}
+
+#searchButton {
+    margin-left: 18%;
 }
