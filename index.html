@@ -14,6 +14,9 @@
     <!-- Local CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="style.css">
 
+    <!-- Google Fonts Link (drop the htttp for production) -->
+    <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
@@ -22,7 +25,7 @@
 
     <nav>
         <div class="nav-wrapper">
-            <a href="#!" class="brand-logo left"><i class="material-icons">local_bar</i>HERE's Beer!</a>
+            <a href="#!" class="brand-logo left"><i class="material-icons">local_bar</i><span id="name">Pub </span>HERE</a>
             <ul class="right">
                 <li><a href="sass.html"><i class="material-icons">search</i></a></li>
                 <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
@@ -36,7 +39,7 @@
             <div class="card">
                 <div class="row ranges">
                     <div id="barLabel">
-                        5 Bars
+                        <span id="numberBars"></span> Bars. <span id="barMessage"></span>
                     </div>
                     <div class="row" id="barRange"></div>
 
@@ -50,6 +53,10 @@
                         <span id="threeDollar">$$$</span>
                     </div>
 
+                    <div id="barLabel">
+                        <span id="numberMiles"></span> miles.
+                    </div>
+                    <div class="row" id="walkRange"></div>
 
                 </div>
 
@@ -62,33 +69,16 @@
         </div>
 
 
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+        <!-- Google Jquery CDN -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.1/nouislider.js"></script>
 
-
-
-    </div>
-
-
-    <p id="demo"></p>
-
-    </div>
-
-
-
-
-
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-    <!-- Google Jquery CDN -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/13.1.1/nouislider.js"></script>
-
-    <!-- Local JS -->
-    <script src="script.js"></script>
+        <!-- Local JS -->
+        <script src="script.js"></script>
 </body>
 
 </html>

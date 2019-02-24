@@ -1,5 +1,12 @@
-body, html {
+body,
+html {
     height: 100%;
+}
+
+nav {
+    height: 75px;
+    padding-top: 10px;
+    background: rgb(51, 51, 51);
 }
 
 body {
@@ -9,6 +16,12 @@ body {
 
 .nav-wrapper {
     margin-bottom: 0px;
+}
+
+#name {
+    font: 50px/0.8 'Cookie', Helvetica, sans-serif;
+    letter-spacing: -2px;
+    word-spacing: 5px;
 }
 
 #toast-container {
@@ -68,7 +81,7 @@ body {
 
 
 #priceLabel {
-    height: 60px;
+    height: 40px;
     text-align: center;
     margin: 10px 0 0 0;
     padding: 0px 0px 15px 0px;
