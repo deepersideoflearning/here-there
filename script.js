@@ -42,7 +42,10 @@ function showPosition(position) {
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url": corsProxy + "https://api.yelp.com/v3/businesses/search?term=bar&latitude=" + myLocation.latitude + "&longitude=" + myLocation.longitude + "&radius=1600",
+        "url": corsProxy + "https://api.yelp.com/v3/businesses/search?term=bar&latitude=" +
+            myLocation.latitude + "&longitude=" +
+            myLocation.longitude + "&radius=" +
+            numberMiles * 1600 + "",
         "method": "GET",
         "headers": {
             "Authorization": "Bearer Mj1pOfDjKL_Xjyw2-WwFOV6Kjs_fkwRCQ-XOuWjwfeh-9ohYhvL_EcAwrhr7-2JdMkn2lls0uXxdozD-oWcMz2PjqNcP9c3zLQVUtxIvBRrr_nzPR7x1DsdTPMHjW3Yx",
@@ -132,15 +135,15 @@ const sortBars = (myLocation, response, numberBars, numberPrice, numberMiles) =>
     let results = [];
 
     // Number of Bars to Return
-    console.log(numberBars);
+    // console.log(numberBars);
     // Price Range (1 = low | 3 = high);
-    console.log(numberPrice);
+    // console.log(numberPrice);
     // Mile Range
-    console.log(numberMiles);
+    // console.log(numberMiles);
 
 
     for (let i = 0; i < response.businesses.length; i++) {
-        // console.log(response.businesses[i].name);
+
         let price = 0;
 
         if (response.businesses[i].price != undefined) {
@@ -154,8 +157,6 @@ const sortBars = (myLocation, response, numberBars, numberPrice, numberMiles) =>
         } else {
             open = true;
         }
-
-
 
         const result = {
             name: response.businesses[i].name,
@@ -193,51 +194,114 @@ const sortBars = (myLocation, response, numberBars, numberPrice, numberMiles) =>
     }
 
     results.splice(numberBars, (results.length - numberBars));
-   
+
     // MORE JAVASCRIPT
     populateMap(myLocation, results);
 
 }
 
-
 const populateMap = (myLocation, results) => {
     $('#cardRow').html('');
     $('#map').css('display', 'block');
 
-    initMap(myLocation, results);
-
-
     function initMap(myLocation, results) {
-        console.log(results);
-        console.log(myLocation);
+
+
         const center = {
             lat: myLocation.latitude,
             lng: myLocation.longitude
         }
-        const location = []
+        const waypoints = [];
 
-        for (let i = 0; i < results.length; i++) {
-            location.push(results[0].location);
-        }
 
-        console.log('location');
-        console.log(location);
+        // Requiring direction services
+        const directionsService = new google.maps.DirectionsService;
+        const directionsDisplay = new google.maps.DirectionsRenderer;
 
         // The map, centered between 
         const map = new google.maps.Map(
             document.getElementById('map'), {
                 zoom: 14,
-                center: center
+                center: center,
+                disableDefaultUI: true
             });
+        directionsDisplay.setMap(map);
 
-        for (let i = 0; i < location.length; i++) {
-            console.log('map marker for:');
-            console.log(location[i]);
-            new google.maps.Marker({
-                position: new google.maps.LatLng(location[i]),
-                map: map
-            })
+        // new google.maps.Marker({
+        //     position: center,
+        //     icon: {
+        //         url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        //     },
+        //     map: map
+        // });
+
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, center, results, waypoints) {
+            directionsService.route({
+                origin: center,
+                destination: results[results.length - 1].location,
+                waypoints: waypoints,
+                optimizeWaypoints: true,
+                travelMode: 'WALKING'
+            }, function (response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                    // console.log();
+                    const order = response.routes[0].waypoint_order;
+                    addTiles(results, order, center);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
         }
 
+        for (key in results) {
+            waypoints.push({
+                location: results[key].location,
+                stopover: true
+            });
+        }
+        calculateAndDisplayRoute(directionsService, directionsDisplay, center, results, waypoints)
+
+
     }
+
+    initMap(myLocation, results);
+}
+
+const addTiles = (results, order, center) => {
+    console.log(results);
+    console.log(order);
+    console.log(center);
+
+    const fastestOrder = [];
+
+    for (let i = 0; i < order.length; i++) {
+        fastestOrder[i] = results[order[i]];
+    }
+
+    console.log(fastestOrder);
+
+    for (let i = 0; i < fastestOrder.length; i++) {
+        const tileDiv = $('<div>');
+        tileDiv.addClass('row tileDiv');
+        const imageDiv = $('<div>');
+        imageDiv.addClass('col s4');
+        const image = $('<img>');
+        image.attr('src', fastestOrder[i].imageurl)
+        image.addClass('image');
+        imageDiv.append(image);
+        tileDiv.append(imageDiv);
+
+        const name = $('<div>');
+        name.attr('id', 'barName');
+        name.html('<span id="rank">#' + (i+1) + ':</span>' + '  ' + fastestOrder[i].name);
+        const rating = $('<div>');
+        rating.attr('id', 'rating');
+        rating.html(fastestOrder[i].rating + ' <i class="material-icons star">star</i>');
+        tileDiv.append(name, rating);
+        $('.tileRow').append(tileDiv);
+    }
+
+
 }
