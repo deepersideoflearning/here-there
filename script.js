@@ -6,7 +6,7 @@ $(document).ready(function () {
     let numberMiles = 0;
 
     // Toast - To be run when user clicks send
-    $('#searchButton').click(() =>{
+    $('#searchButton').click(() => {
         M.toast({
             html: 'Please Allow Your Location',
             displayLength: 1000,
@@ -200,75 +200,166 @@ $(document).ready(function () {
         // MORE JAVASCRIPT
         populateMap(myLocation, results);
 
+
     }
+
+
+
+    // *****************************************************************************
+    // const populateMap = (myLocation, results) => {
+    //     $('#cardRow').html('');
+    //     $('#map').css('display', 'block');
+
+    //     function initMap(myLocation, results) {
+
+
+    //         const center = {
+    //             lat: myLocation.latitude,
+    //             lng: myLocation.longitude
+    //         }
+    //         const waypoints = [];
+
+
+    //         // Requiring direction services
+    //         const directionsService = new google.maps.DirectionsService;
+    //         const directionsDisplay = new google.maps.DirectionsRenderer;
+
+    //         // The map, centered between 
+    //         const map = new google.maps.Map(
+    //             document.getElementById('map'), {
+    //                 zoom: 14,
+    //                 center: center,
+    //                 disableDefaultUI: true
+    //             });
+    //         directionsDisplay.setMap(map);
+
+    //         // new google.maps.Marker({
+    //         //     position: center,
+    //         //     icon: {
+    //         //         url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+    //         //     },
+    //         //     map: map
+    //         // });
+
+
+    //         function calculateAndDisplayRoute(directionsService, directionsDisplay, center, results, waypoints) {
+    //             directionsService.route({
+    //                 origin: center,
+    //                 destination: results[results.length - 1].location,
+    //                 waypoints: waypoints,
+    //                 optimizeWaypoints: true,
+    //                 travelMode: 'WALKING'
+    //             }, function (response, status) {
+    //                 if (status === 'OK') {
+    //                     directionsDisplay.setDirections(response);
+    //                     // console.log();
+    //                     const order = response.routes[0].waypoint_order;
+    //                     addTiles(results, order, center);
+    //                 } else {
+    //                     window.alert('Directions request failed due to ' + status);
+    //                 }
+    //             });
+    //         }
+
+    //         for (key in results) {
+    //             waypoints.push({
+    //                 location: results[key].location,
+    //                 stopover: true
+    //             });
+    //         }
+    //         calculateAndDisplayRoute(directionsService, directionsDisplay, center, results, waypoints)
+
+
+    //     }
+
+    //     initMap(myLocation, results);
+    // }
+    // *****************************************************************************
 
     const populateMap = (myLocation, results) => {
         $('#cardRow').html('');
         $('#map').css('display', 'block');
 
-        function initMap(myLocation, results) {
 
+        var platform = new H.service.Platform({
+            'app_id': '32SZZi8UYe8C7VZcKWXy',
+            'app_code': 'wLWAa2tEmxgDRx02Jykwzw'
+        });
 
-            const center = {
-                lat: myLocation.latitude,
-                lng: myLocation.longitude
-            }
-            const waypoints = [];
-
-
-            // Requiring direction services
-            const directionsService = new google.maps.DirectionsService;
-            const directionsDisplay = new google.maps.DirectionsRenderer;
-
-            // The map, centered between 
-            const map = new google.maps.Map(
-                document.getElementById('map'), {
-                    zoom: 14,
-                    center: center,
-                    disableDefaultUI: true
-                });
-            directionsDisplay.setMap(map);
-
-            // new google.maps.Marker({
-            //     position: center,
-            //     icon: {
-            //         url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-            //     },
-            //     map: map
-            // });
-
-
-            function calculateAndDisplayRoute(directionsService, directionsDisplay, center, results, waypoints) {
-                directionsService.route({
-                    origin: center,
-                    destination: results[results.length - 1].location,
-                    waypoints: waypoints,
-                    optimizeWaypoints: true,
-                    travelMode: 'WALKING'
-                }, function (response, status) {
-                    if (status === 'OK') {
-                        directionsDisplay.setDirections(response);
-                        // console.log();
-                        const order = response.routes[0].waypoint_order;
-                        addTiles(results, order, center);
-                    } else {
-                        window.alert('Directions request failed due to ' + status);
-                    }
-                });
-            }
-
-            for (key in results) {
-                waypoints.push({
-                    location: results[key].location,
-                    stopover: true
-                });
-            }
-            calculateAndDisplayRoute(directionsService, directionsDisplay, center, results, waypoints)
-
-
+        const center = {
+            lat: myLocation.latitude,
+            lng: myLocation.longitude
         }
 
-        initMap(myLocation, results);
+        // Obtain the default map types from the platform object:
+        var defaultLayers = platform.createDefaultLayers();
+
+        // Instantiate (and display) a map object:
+        var map = new H.Map(
+            document.getElementById('map'),
+            defaultLayers.normal.map, {
+                zoom: 14.5,
+                center: {
+                    lat: center.lat,
+                    lng: center.lng
+                }
+            });
+        let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+        // let geocoder = this.platform.getGeocodingService();
+        let router = platform.getRoutingService();
+        let markers = [];
+
+        const params = {
+            "mode": "shortest;pedestrian",
+            "representation": "display"
+        }
+        for (let i = 0; i < results.length; i++) {
+            params['waypoint' + i] = [results[i].location.lat, results[i].location.lng];
+        }
+
+        console.log(params);
+
+        function dropMarker(latitude, longitude) {
+            var marker = new H.map.Marker({
+                lat: latitude,
+                lng: longitude
+            });
+            map.addObject(marker);
+        }
+
+        for (let i = 0; i < results.length; i++) {
+            dropMarker(results[i].location.lat, results[i].location.lng)
+        }
+
+        router.calculateRoute(params, data => {
+            if (data.response) {
+                console.log(data);
+                data = data.response.route[0];
+                let lineString = new H.geo.LineString();
+                data.shape.forEach(point => {
+                    let parts = point.split(",");
+                    lineString.pushLatLngAlt(parts[0], parts[1]);
+                });
+                let routeLine = new H.map.Polyline(lineString, {
+                    style: {
+                        strokeColor: "blue",
+                        lineWidth: 5
+                    }
+                });
+                map.addObject(routeLine);
+            }
+        }, error => {
+            console.error(error);
+        });
+
+
+
+
+
+        let order = [0, 1, 2, 3, 4, 5];
+
+        addTiles(results, order, center);
+
     }
 
     const addTiles = (results, order, center) => {
@@ -301,11 +392,15 @@ $(document).ready(function () {
             const rating = $('<div>');
             rating.attr('id', 'rating');
             rating.html(fastestOrder[i].rating + ' <i class="material-icons star">star</i>');
-            tileDiv.append(name, rating);
+            
+            const moreInfo = $('<div>');
+            moreInfo.attr('id', 'moreInfo');
+            const link = $('<a href="' + results[i].url + '" target = "new" id="linkText">Visit ' + results[i].name + '</a>');
+            moreInfo.append(link);
+            
+            tileDiv.append(name, rating, moreInfo);
             $('.tileRow').append(tileDiv);
         }
-
-
     }
 
     /* code here */
