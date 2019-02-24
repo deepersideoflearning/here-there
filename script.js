@@ -6,7 +6,7 @@ $(document).ready(function () {
     let numberMiles = 0;
 
     // Toast - To be run when user clicks send
-    function toast() {
+    $('#searchButton').click(() =>{
         M.toast({
             html: 'Please Allow Your Location',
             displayLength: 1000,
@@ -14,7 +14,7 @@ $(document).ready(function () {
                 getLocation();
             }
         });
-    }
+    });
 
     // Get User Location from HTTPS
     function getLocation() {
