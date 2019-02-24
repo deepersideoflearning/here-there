@@ -6,7 +6,7 @@ $(document).ready(function () {
     let numberMiles = 0;
 
     // Toast - To be run when user clicks send
-    $('#searchButton').click(() =>{
+    $('#searchButton').click(() => {
         M.toast({
             html: 'Please Allow Your Location',
             displayLength: 1000,
@@ -301,7 +301,13 @@ $(document).ready(function () {
             const rating = $('<div>');
             rating.attr('id', 'rating');
             rating.html(fastestOrder[i].rating + ' <i class="material-icons star">star</i>');
-            tileDiv.append(name, rating);
+
+            const moreInfo = $('<div>');
+            moreInfo.attr('id', 'moreInfo');
+            const link = $('<a href="' + results[i].url + '" target = "new" id="linkText">Visit ' + results[i].name + '</a>');
+            moreInfo.append(link);
+
+            tileDiv.append(name, rating, moreInfo);
             $('.tileRow').append(tileDiv);
         }
 
